@@ -1,4 +1,19 @@
+<?php 
+$user = 'root';
+$password = '';
+$database = 'wordpress';
 
+$pdo = new PDO('mysql:host=localhost;dbname=' . $database, $user, $password, [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+]);
+
+$stmt = $pdo->query('SELECT * FROM `blog`');
+$daten = $stmt->fetchAll();
+var_dump($daten);
+
+?>
 
 
 <!DOCTYPE html>
@@ -27,7 +42,6 @@
 
     <div class = blogs>
 
-    <?php foreach(){?>
         <h3 class = blogtitle>Titel</h3>
         <h3 class = name>Name</h3>
         <p class = text>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>
