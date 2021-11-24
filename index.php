@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -24,6 +27,7 @@
 
     <div class = blogs>
 
+    <?php foreach(){?>
         <h3 class = blogtitle>Titel</h3>
         <h3 class = name>Name</h3>
         <p class = text>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</p>

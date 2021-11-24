@@ -5,6 +5,13 @@
     $new = $_POST['new'] ?? '';
     $text = $_POST['text'] ?? '';
     $picture = $_POST['picture'] ?? '';
+
+    //Daten in Datenbank speicher
+    $dbConnection = new PDO('mysql:host=localhost;dbname=wordpress', 'root', '');
+    $stmt = $dbConnection->prepare('INSERT INTO blog (created_by, post_title, post_text, created_at)
+                                    VALUES (:name, :new, :text, now())');
+
+    $stmt->execute([':name' => $name, ':new' => $new, ':text' => $text]);
 ?>
 
 
@@ -38,21 +45,31 @@
 
         <form action = "newblog.php" method = "post">
 
-            <label class = form for = "name">Ihr Name</label><br>
+            <div class = form>
+            <label for = "name">Ihr Name</label><br>
             <input type = "text" id = "name" name = "name" value="<?= $name ?? '' ?>"><br>
+            </div>
 
-            <label class = form for = "new">Titel des Beitrags</label><br>
+            <div class = form>
+            <label for = "new">Titel des Beitrags</label><br>
             <input type = "text" id = "new" name = "new" value="<?= $new ?? '' ?>"><br>
+            </div>
 
-            <label class = form for = "text">Titel des Beitrags</label><br>
-            <input type = "text" id = "text" name = "text" value="<?= $text ?? '' ?>"><br>
+            <div class = form>
+            <label for = "text">Ihr Text</label><br>
+            <textarea name="text" id="text" rows="5"></textarea>><br>
+            </div>
 
-            <label class = form for = "picture">Titel des Beitrags</label><br>
+            <div class = form>
+            <label for = "picture">Bild</label><br>
             <input type = "text" id = "picture" name = "picture" value="<?= $picture ?? '' ?>"><br>
+            </div>
 
+            <div class = form>
             <input class = "btn btn.primary" type = "submit" value = "hochladen">
 
             <a href = "index.php">abbrechen</a>
+            </div>
 
         </form>
      </div>
