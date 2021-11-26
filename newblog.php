@@ -1,17 +1,37 @@
 <?php
     $errors = [];
 
-    $name = $_POST['name'] ?? '';
-    $new = $_POST['new'] ?? '';
-    $text = $_POST['text'] ?? '';
+    $name = htmlspecialchars($_POST['name'] ?? '');
+    $new = htmlspecialchars($_POST['new'] ?? '');
+    $text = htmlspecialchars($_POST['text'] ?? '');
     $picture = $_POST['picture'] ?? '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $name = trim($name);
+        $new = trim($new);
+        $text = trim($text);
 
-    //Daten in Datenbank speicher
-    $dbConnection = new PDO('mysql:host=localhost;dbname=wordpress', 'root', '');
-    $stmt = $dbConnection->prepare('INSERT INTO blog (created_by, post_title, post_text, created_at)
-                                    VALUES (:name, :new, :text, now())');
 
-    $stmt->execute([':name' => $name, ':new' => $new, ':text' => $text]);
+        if ($name === '') {
+            $errors[] = 'Bitte geben Sie einen Namen ein.';
+        }
+        if ($new === '') {
+            $errors[] = 'Bitte geben Sie Titel ein.';
+        }
+        if ($text === '') {
+            $errors[] = 'Bitte geben Sie einen Text ein.';
+        }
+        if (filter_var('keine://domain', FILTER_VALIDATE_URL) !== false & $picture !== "") {
+            $errors[] = 'Bitte geben Sie eine gültige URL ein';
+        }
+        else{
+            $dbConnection = new PDO('mysql:host=localhost;dbname=wordpress', 'root', '');
+            $stmt = $dbConnection->prepare('INSERT INTO blog (created_by, post_title, post_text, picture, created_at) 
+                                            VALUES (:name, :new, :text,  :picture, now())');
+        
+
+          $stmt->execute([':name' => $name, ':new' => $new, ':text' => $text, ':picture' => $picture]);
+        }
+    }
 ?>
 
 
@@ -26,6 +46,8 @@
     <title>Homepage</title>
 </head>
 <body class = container>
+
+
     
     <div class = title>
 
@@ -69,9 +91,23 @@
             <input class = "btn btn.primary" type = "submit" value = "hochladen">
 
             <a href = "index.php">abbrechen</a>
+
+            
+            <?php if (count($errors) > 0) { ?>
+                <div class="error-box">
+                    <ul>
+                        <?php foreach ($errors as $error) { ?>
+                            <li><?= $error ?></li>
+                        <?php } ?>
+                    </ul>
+                </div>
+            <?php } ?>
             </div>
+        
+                        
 
         </form>
+
      </div>
 
     </div>

@@ -5,6 +5,10 @@
     margin-right: 5%;
 }
 
+ul {
+    list-style: none;
+}
+
 
 .nav {
     display: flex;
