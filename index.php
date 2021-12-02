@@ -107,26 +107,27 @@ $comments = $stmt->fetchAll();
                 <h3 class = text><?= $data["post_text"]?></h3>
 
                 <?php if ($data["picture"] !== ""){?>
-                <img src = <?= $data["picture"]?> class = picture>
+                <img src = <?= $data["picture"]?> class = "picture">
                 <?php }?>
                 
                 <h3 class = date><?= $data["created_at"]?></h3>
 
                 <h2 class = likes>Likes: <?= $data["likes"]?></h2>
                 
-                <form action="index.php" Method = 'POST'>
+                <form class = "enter" action="index.php" Method = 'POST'>
                     <input class = like type="submit" name="Liken" value="Liken" />
                     <input name="blog-id" type="hidden" value="<?= $data["ID"] ?>" />
                 </form>
 
-                <form action="index.php" method = "POST">
-                        <label for = "commenttitle">Kommentar</label><br>
+
+                <form class = "formular"  action="index.php" method = "POST">
+                        <label class = "label" for = "commenttitle">Kommentare</label><br>
                         <textarea name="comment" id="comment" rows="5"></textarea><br>
                         <input class = send_comment type="submit" name="absenden" value="absenden" />
                         <input name="blog-id-comments" type="hidden" id = "ID" value="<?= $data["ID"] ?>" />
                 </form>
                 
-
+                <div class = comments>
                 <?php foreach ($comments as $comment) {
                     if ($comment['ID'] === $data['ID']){
                         if ($comment['comment'] !== "") {
@@ -137,11 +138,13 @@ $comments = $stmt->fetchAll();
                 <?php }
                 }
                 }?>
+                </div>
             </div>
-           
+            <p class = line></p>
             <br>
 
         <?php } ?>
+        
         </div> 
 
     </div>
