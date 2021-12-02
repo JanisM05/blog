@@ -13,19 +13,28 @@ ul {
 .nav {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: space-around;
     list-style: none;
-    font-size: 30;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+a {
+    width: 200px;
+    text-align: center;
 }
 
 .title {
-     background-color: darkgray;
-     border: black 10px solid;
-     text-align: center;
-     padding-top: 0px;
-     padding-bottom: 0px;
-     border-radius: 8px;
-
+    text-align: center;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    border-radius: 8px;
+    width: 100%;
+    background-size: cover;
+    background-color: rgb(172, 168, 168);
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border: 2px solid black;
 }
 
 a:link {
@@ -33,9 +42,62 @@ a:link {
 }
 
 .formular {
+    border-radius: 8px;
+    font-size: 20px;
+    width: 100%;
     text-align: center;
 }
 
 .form {
     padding-top: 20px;
+    width: 100%;
+}
+
+
+.formname {
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.formtitle {
+    margin-top: 20px;
+}
+
+.formtext {
+    margin-top: 20px;
+}
+
+.formpicture {
+    margin-top: 20px;
+}
+
+.formend {
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+button {
+    font-size: 20px;
+}
+
+body {
+    background-image: url(https://us.123rf.com/450wm/mblach/mblach1609/mblach160900065/63955239-white-brick-wall-background.jpg?ver=6);
+    background-attachment: fixed;
+}
+
+.navelement {
+    border: 2px solid black;
+    padding: 4px;
+    background-color:rgb(172, 168, 168);
+    color: black;
+}
+
+input{
+    font-size: 20px;
+}
+
+
+textarea {
+    width: 14;
+    font-size: 20px;
 }

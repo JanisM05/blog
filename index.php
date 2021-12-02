@@ -1,7 +1,49 @@
 <?php 
+
 $user = 'root';
 $password = '';
 $database = 'wordpress';
+
+/*
+if (isset($_POST["blog-id"])) {
+    echo ($_POST["blog-id"]);
+}
+*/
+
+$comment = htmlspecialchars($_POST["comment"] ?? '');
+
+if (isset($_POST["blog-id-comments"])) {
+    $commentid = $_POST["ID"] ?? '';
+}
+$commentid = $_POST["ID"] ?? '';
+
+
+if (isset($_POST["blog-id-comments"])) {
+    $ID_comments = $_POST["blog-id-comments"];
+}
+
+if(isset($_POST['absenden']) && $_POST['absenden'] == 'absenden') {
+    $dbConnectionComments = new PDO('mysql:host=localhost;dbname=wordpress', 'root', '');
+    $stmt = $dbConnectionComments->prepare('INSERT INTO comments (comment, ID) 
+    VALUES (:comment, :ID)');
+
+
+    $stmt->execute([':comment' => $comment, ':ID' => $ID_comments]);
+}
+
+if (isset($_POST["blog-id"])) {
+    $ID = $_POST["blog-id"];
+}
+
+if(isset($_POST['Liken']) && $_POST['Liken'] == 'Liken') {
+
+
+    $dbConnection = new PDO('mysql:host=localhost;dbname=wordpress', 'root', '');
+    $stmt = $dbConnection->prepare("UPDATE blog Set likes = likes + 1 WHERE ID = $ID");
+
+
+    $stmt->execute();
+}
 
 $pdo = new PDO('mysql:host=localhost;dbname=' . $database, $user, $password, [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -9,8 +51,7 @@ $pdo = new PDO('mysql:host=localhost;dbname=' . $database, $user, $password, [
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 ]);
 
-$stmt = $pdo->query('SELECT * FROM blog order by created_at desc');
-$daten = $stmt->fetchAll();
+
 
 
 
@@ -22,6 +63,12 @@ PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
 $stmt = $pdo2->query('SELECT url, description FROM urls order by description asc');
 $otherblogs = $stmt->fetchAll();
 
+
+$stmt = $pdo->query('SELECT * FROM blog order by created_at desc');
+$daten = $stmt->fetchAll();
+
+$stmt = $pdo->query('SELECT * FROM comments');
+$comments = $stmt->fetchAll();
 
 ?>
 
@@ -40,45 +87,63 @@ $otherblogs = $stmt->fetchAll();
     
     <div class = title>
 
-    <h1>Blog von Janis</h1>
-    <h2>Herzlich Willkommen</h2>
+        <h1>Blog von Janis</h1>
+        <h2>Herzlich Willkommen</h2>
 
     </div>
+    <div class = main>
 
-        <ul class = nav>
-            <a href = "index.php"><li>Alle Blogs</li></a>
-            <a href = "newblog.php"><li >Blog erstellen</li></a>
-        </ul>
+        <div class = nav>
+            <a class = "navelement" href = "index.php"><li>Alle Blogs</li></a>
+            <a class = "navelement" href = "newblog.php"><li >Beitrag erstellen</li></a>
+            <a class = "navelement"href = "otherblogs.php"><li >Zu den anderen Blogs</li></a>
+</div>
+        <div class="blog-list">
         <?php foreach($daten as $data){ ?>
 
-            <div class = blogs>
+            <div class = blog>        
+                <h2 class = blogtitle><?= $data["post_title"] ?> </h2>
+                <h2 class = name><?= $data["created_by"]?></h2>
+                <h3 class = text><?= $data["post_text"]?></h3>
 
-                <h3 class = blogtitle> <?= $data["post_title"] ?> </h3>
-                <h3 class = name><?= $data["created_by"]?></h3>
-                <p class = text><?= $data["post_text"]?></p>
+                <?php if ($data["picture"] !== ""){?>
                 <img src = <?= $data["picture"]?> class = picture>
-                <p class = date><?= $data["created_at"]?></p>
+                <?php }?>
+                
+                <h3 class = date><?= $data["created_at"]?></h3>
+
+                <h2 class = likes>Likes: <?= $data["likes"]?></h2>
+                
+                <form action="index.php" Method = 'POST'>
+                    <input class = like type="submit" name="Liken" value="Liken" />
+                    <input name="blog-id" type="hidden" value="<?= $data["ID"] ?>" />
+                </form>
+
+                <form action="index.php" method = "POST">
+                        <label for = "commenttitle">Kommentar</label><br>
+                        <textarea name="comment" id="comment" rows="5"></textarea><br>
+                        <input class = send_comment type="submit" name="absenden" value="absenden" />
+                        <input name="blog-id-comments" type="hidden" id = "ID" value="<?= $data["ID"] ?>" />
+                </form>
                 
 
+                <?php foreach ($comments as $comment) {
+                    if ($comment['ID'] === $data['ID']){
+                        if ($comment['comment'] !== "") {
+                    ?>
+                
+                    <p><?= $comment['comment'] ?></p>
+
+                <?php }
+                }
+                }?>
             </div>
-            
+           
             <br>
 
         <?php } ?>
+        </div> 
 
     </div>
-
-
-    <footer class = footer>
-
-        <h2 class = otherblogs>Zu den anderen Blogs</h2>
-
-        <?php foreach($otherblogs as $otherblog) { ?>
-
-        <a href = <?= $otherblog["url"]?>><?= $otherblog["description"]?></a>
-
-        <?php }?>
-
-    </footer>
 </body>
 </html>
